@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hapa Crypto Node — Console</title>
+    <style>
+        :root {
+            --hapa-bg: #0a0a0c;
+            --hapa-surface: rgba(20, 20, 25, 0.8);
+            --hapa-primary: #00f2ff;
+            --hapa-text: #e0e0e0;
+            --hapa-text-muted: #888;
+            --hapa-border: rgba(0, 242, 255, 0.2);
+            --hapa-bg-blur: 20px;
+        }
+
+        body {
+            background: var(--hapa-bg);
+            color: var(--hapa-text);
+            font-family: 'JetBrains Mono', 'Inter', monospace;
+            margin: 0;
+            padding: 2rem;
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+
+        .hud {
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            right: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--hapa-surface);
+            backdrop-filter: blur(var(--hapa-bg-blur));
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--hapa-border);
+            z-index: 100;
+        }
+
+        .mode-tag {
+            background: rgba(0, 242, 255, 0.1);
+            color: var(--hapa-primary);
+            padding: 0.2rem 0.6rem;
+            font-size: 0.8rem;
+            border: 1px solid var(--hapa-primary);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #444;
+            display: inline-block;
+            margin-right: 0.5rem;
+        }
+
+        .status-dot.active {
+            background: var(--hapa-primary);
+            box-shadow: 0 0 10px var(--hapa-primary);
+        }
+
+        main {
+            margin-top: 4rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            font-weight: 300;
+            letter-spacing: 0.1rem;
+            margin-bottom: 2rem;
+            color: var(--hapa-primary);
+        }
+
+        .panel {
+            background: var(--hapa-surface);
+            backdrop-filter: blur(var(--hapa-bg-blur));
+            border: 1px solid var(--hapa-border);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .panel h2 {
+            font-size: 1rem;
+            margin-top: 0;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2rem;
+            color: var(--hapa-text-muted);
+        }
+
+        .capabilities-list {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .cap-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1rem;
+            border-left: 2px solid var(--hapa-primary);
+        }
+
+        .cap-title {
+            display: block;
+            font-size: 0.7rem;
+            color: var(--hapa-text-muted);
+            margin-bottom: 0.2rem;
+        }
+
+        .cap-value {
+            font-size: 0.9rem;
+        }
+
+        .log-panel {
+            font-size: 0.8rem;
+            height: 300px;
+            overflow-y: auto;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .log-entry {
+            margin-bottom: 0.4rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: 0.2rem;
+        }
+
+        .log-ts { color: var(--hapa-text-muted); }
+        .log-msg { color: var(--hapa-text); }
+
+        .token-input {
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid var(--hapa-border);
+            color: var(--hapa-primary);
+            width: 100%;
+            padding: 0.5rem 0;
+            font-family: inherit;
+            margin-bottom: 1rem;
+        }
+
+        .token-input:focus {
+            outline: none;
+            border-bottom-color: var(--hapa-primary);
+        }
+
+        .btn {
+            background: var(--hapa-primary);
+            color: black;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            transition: all 0.2s;
+        }
+
+        .btn:hover {
+            filter: brightness(1.2);
+            box-shadow: 0 0 15px var(--hapa-primary);
+        }
+
+        .btn:disabled {
+            background: #444;
+            color: #888;
+            box-shadow: none;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <header class="hud">
+        <div>
+            <span class="mode-tag">MODE: LORE</span>
+            <span style="margin-left: 1rem; font-size: 0.8rem; opacity: 0.7;">HAPA-CRYPTO-NODE v0.1.0</span>
+        </div>
+        <div>
+            <span id="status-dot" class="status-dot"></span>
+            <span id="status-text" style="font-size: 0.8rem;">DISCONNECTED</span>
+        </div>
+    </header>
+
+    <main>
+        <h1>CRYPTO ARMORY</h1>
+
+        <section class="panel">
+            <h2>Authentication</h2>
+            <input type="password" id="token-input" class="token-input" placeholder="Enter Bearer Token">
+            <button id="connect-btn" class="btn">Connect</button>
+        </section>
+
+        <section class="panel" id="capabilities-panel" style="display: none;">
+            <h2>Capabilities</h2>
+            <div class="capabilities-list" id="cap-list">
+                <!-- Dynamic -->
+            </div>
+        </section>
+
+        <section class="panel">
+            <h2>Telemetry / History</h2>
+            <div class="log-panel" id="log-panel">
+                <div class="log-entry">
+                    <span class="log-ts">[BOOT]</span>
+                    <span class="log-msg">Interface ready. Awaiting connection...</span>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const state = {
+            token: localStorage.getItem('hapa_crypto_dev_token_v1') || '',
+            connected: false,
+            capabilities: null
+        };
+
+        const elements = {
+            tokenInput: document.getElementById('token-input'),
+            connectBtn: document.getElementById('connect-btn'),
+            statusDot: document.getElementById('status-dot'),
+            statusText: document.getElementById('status-text'),
+            logPanel: document.getElementById('log-panel'),
+            capPanel: document.getElementById('capabilities-panel'),
+            capList: document.getElementById('cap-list')
+        };
+
+        if (state.token) {
+            elements.tokenInput.value = state.token;
+            autoConnect();
+        }
+
+        elements.connectBtn.addEventListener('click', () => {
+            const token = elements.tokenInput.value.trim().replace(/^Bearer\s+/, '');
+            connect(token);
+        });
+
+        async function connect(token) {
+            addLog('AUTH', 'Attempting to fetch capabilities...');
+            try {
+                const resp = await fetch('/v1/capabilities', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (resp.ok) {
+                    const data = await resp.json();
+                    state.token = token;
+                    state.connected = true;
+                    state.capabilities = data.capabilities;
+                    localStorage.setItem('hapa_crypto_dev_token_v1', token);
+                    
+                    updateStatus(true);
+                    renderCapabilities();
+                    addLog('OK', 'Connected to Hapa Crypto Node.');
+                } else {
+                    throw new Error(`HTTP ${resp.status}`);
+                }
+            } catch (err) {
+                state.connected = false;
+                updateStatus(false);
+                addLog('ERR', `Connection failed: ${err.message}`);
+            }
+        }
+
+        async function autoConnect() {
+            if (state.token) connect(state.token);
+        }
+
+        function updateStatus(active) {
+            elements.statusDot.className = `status-dot ${active ? 'active' : ''}`;
+            elements.statusText.innerText = active ? 'CONNECTED' : 'DISCONNECTED';
+            elements.capPanel.style.display = active ? 'block' : 'none';
+        }
+
+        function renderCapabilities() {
+            elements.capList.innerHTML = '';
+            for (const [type, algs] of Object.entries(state.capabilities)) {
+                const div = document.createElement('div');
+                div.className = 'cap-item';
+                div.innerHTML = `
+                    <span class="cap-title">${type.toUpperCase()}</span>
+                    <span class="cap-value">${algs.join(', ')}</span>
+                `;
+                elements.capList.appendChild(div);
+            }
+        }
+
+        function addLog(ts, msg) {
+            const div = document.createElement('div');
+            div.className = 'log-entry';
+            div.innerHTML = `
+                <span class="log-ts">[${ts}]</span>
+                <span class="log-msg">${msg}</span>
+            `;
+            elements.logPanel.prepend(div);
+        }
+    </script>
+</body>
+</html>

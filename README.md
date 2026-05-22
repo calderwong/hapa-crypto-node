@@ -153,3 +153,11 @@ Project-level license: MIT under `Hapa.ai / Calder Wong`. See `LICENSE`.
 Contributors may optionally opt into Bananas work-contribution tracking for attribution. Bananas is an attribution/accounting layer for Hapa work contributions; it is not required to receive the MIT license grant and should not be used to restrict copying, modification, distribution, or private use under the MIT terms.
 
 Existing third-party dependency licenses remain governed by their upstream projects and package metadata.
+
+<!-- HAPA-README-SCREENSHOT-2026-05-22 -->
+
+## Screenshot
+
+![hapa-crypto-node UI screenshot](docs/assets/screenshots/readme-hapa-crypto-node.png)
+
+Hapa Crypto Node crypto armory console.

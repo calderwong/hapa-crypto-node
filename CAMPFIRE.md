@@ -37,6 +37,8 @@ Bearer-token gated:
 
 Token source order is `HAPA_CRYPTO_NODE_TOKEN`, `.node_token`, then generated `.node_token`. `.node_token` is local secret state and must stay out of git.
 
+See `SECURITY.md` for pre-publish secret checks and credential-handling expectations before pushing this repository to a shared remote.
+
 ## Ecosystem role
 
 Verified role: standalone service/library exposing cryptographic primitives for local Hapa workflows.

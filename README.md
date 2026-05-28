@@ -132,7 +132,7 @@ A HTTP smoke check can be run locally after starting the service:
 ```bash
 curl http://127.0.0.1:8736/health
 TOKEN="$(cat .node_token)"
-curl -H "Authorization: Bearer $TOKEN" http://127.0.0.1:8736/v1/capabilities
+curl -H "Authorization: Bearer ${TOKEN}" http://127.0.0.1:8736/v1/capabilities
 ```
 
 ## Repository layout
@@ -144,6 +144,7 @@ Sources/hapa-crypto-node/      Executable CLI and Hummingbird server
 Tests/hapa-crypto-nodeTests/   XCTest coverage for core primitives
 web/index.html                 Local dashboard / Lore Mode console
 CAMPFIRE.md                    Hapa-facing node context and operating notes
+SECURITY.md                    Secret-handling and pre-publish safety checks
 ```
 
 ## License and attribution

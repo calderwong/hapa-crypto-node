@@ -6,7 +6,7 @@ Hapa Crypto Node is the Hapa.ai local cryptography boundary: a small Swift servi
 
 ## Verified implementation facts
 
-- Repository: `/Users/calderwong/Desktop/hapa-crypto-node`
+- Repository: `${HAPA_NODE_ROOT}`
 - Package: SwiftPM, `hapa-crypto-node`
 - Library target: `HapaCrypto`
 - Executable target/product: `hapa-crypto-node`
@@ -50,7 +50,7 @@ Inferred role: trust/keys/crypto substrate for future Hapa wallet, provenance, i
 ```bash
 swift build
 swift test
-swift run hapa-crypto-node serve --port 8736 --cwd /Users/calderwong/Desktop/hapa-crypto-node
+swift run hapa-crypto-node serve --port 8736 --cwd ${HAPA_NODE_ROOT}
 ```
 
 ## Inputs and outputs

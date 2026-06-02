@@ -33,7 +33,7 @@
 ```bash
 swift build
 swift test
-swift run hapa-crypto-node serve --port 8736 --cwd /Users/calderwong/Desktop/hapa-crypto-node
+swift run hapa-crypto-node serve --port 8736 --cwd ${HAPA_NODE_ROOT}
 curl http://127.0.0.1:8736/health
 ```
 
